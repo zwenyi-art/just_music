@@ -10,6 +10,7 @@ const Music_Player = () => {
   const [trackProgress, setTrackProgress] = useState(0);
   const [intervalId, setIntevalId] = useState(null);
   const [canPlay, setCanPlay] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const { duration } = song.current;
   const intervalRef = useRef();
   useEffect(() => {
@@ -40,7 +41,7 @@ const Music_Player = () => {
       song.current.removeEventListener("canplay", handleCanPlay);
       song.current.removeEventListener("waiting", handleWaiting);
     };
-  }, [song.current]);
+  }, [selectedSong]);
   const onScrub = (value) => {
     // Clear any timers already running
     clearInterval(intervalRef.current);
@@ -53,6 +54,7 @@ const Music_Player = () => {
   };
   const startTimer = () => {
     console.log("timer start");
+    setPlaying(true);
     const logCurrentTime = () => {
       console.log("am playing");
       if (song.current.ended) {
@@ -71,6 +73,7 @@ const Music_Player = () => {
   };
   const pauseSong = () => {
     song.current.pause();
+    setPlaying(false);
   };
 
   const toNextTrack = () => {
@@ -97,8 +100,11 @@ const Music_Player = () => {
     <div>
       Song_Player <br />
       {canPlay ? <h1>Can Play Muisic</h1> : <h1>Fetching</h1>}
-      <button onClick={() => playSong()}>Play</button>
-      <button onClick={() => pauseSong()}>Pause</button>
+      {playing ? (
+        <button onClick={() => pauseSong()}>Pause</button>
+      ) : (
+        <button onClick={() => playSong()}>Play</button>
+      )}
       <button onClick={() => toNextTrack()}>Next</button>
       <input
         type="range"

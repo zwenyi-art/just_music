@@ -20,7 +20,7 @@ const Music_Login_Form = () => {
       await signInWithEmailAndPassword(auth, email, password).then(() => {
         onAuthStateChanged(auth, (user) => {
           if (user) {
-            Cookies.set("1519NKO", user?.accessToken);
+            Cookies.set("1519NKO", user?.accessToken, { expires: 7 });
           }
         });
         console.log("Log in success");

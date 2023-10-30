@@ -4,7 +4,7 @@ import { auth } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 const MusicContext = createContext();
 const MusicProvider = ({ children }) => {
-  const [selectedSong, setSelectedSong] = useState(0);
+  const [selectedSong, setSelectedSong] = useState();
   const [isReady, setIsReady] = useState(false);
   const [songs, setSong] = useState([]);
   const [currentUser, setCurrentUser] = useState();
