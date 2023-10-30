@@ -27,12 +27,6 @@ const Music_Dashboard = () => {
       console.error(error);
     }
   };
-  if (currentUser?.accessToken) {
-    const currentToken = currentUser?.accessToken;
-    if (token !== currentToken) {
-      logout();
-    }
-  }
   useEffect(() => {
     // GetData(setMyData);
     myMusic();

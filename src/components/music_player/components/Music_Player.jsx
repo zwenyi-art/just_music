@@ -9,6 +9,7 @@ const Music_Player = () => {
   const [music_volume, setMusic_volume] = useState(0.5);
   const [trackProgress, setTrackProgress] = useState(0);
   const [intervalId, setIntevalId] = useState(null);
+  const [canPlay, setCanPlay] = useState(false);
   const { duration } = song.current;
   const intervalRef = useRef();
   useEffect(() => {
@@ -24,7 +25,22 @@ const Music_Player = () => {
       song.current.pause();
     };
   }, [selectedSong]);
-
+  const handleCanPlay = () => {
+    console.log("can play audio");
+    setCanPlay(true);
+  };
+  const handleWaiting = () => {
+    console.log("waiting audio");
+    setCanPlay(false);
+  };
+  useEffect(() => {
+    song.current.addEventListener("canplay", handleCanPlay);
+    song.current.addEventListener("waiting", handleWaiting);
+    return () => {
+      song.current.removeEventListener("canplay", handleCanPlay);
+      song.current.removeEventListener("waiting", handleWaiting);
+    };
+  }, [song.current]);
   const onScrub = (value) => {
     // Clear any timers already running
     clearInterval(intervalRef.current);
@@ -80,7 +96,7 @@ const Music_Player = () => {
   return (
     <div>
       Song_Player <br />
-      {song.current.title} <br />
+      {canPlay ? <h1>Can Play Muisic</h1> : <h1>Fetching</h1>}
       <button onClick={() => playSong()}>Play</button>
       <button onClick={() => pauseSong()}>Pause</button>
       <button onClick={() => toNextTrack()}>Next</button>
