@@ -31,9 +31,11 @@ const Music_Login_Form = () => {
     }
   };
   return (
-    <div>
-      Music_Login_Form
-      <form className="flex" onSubmit={signIn}>
+    <div className="container mx-auto">
+      <form
+        className=" flex flex-col items-center justify-center max-w-[100px] h-60 bg-slate-500"
+        onSubmit={signIn}
+      >
         <input
           ref={emailRef}
           type="email"
@@ -48,6 +50,7 @@ const Music_Login_Form = () => {
           id="password"
           placeholder="Password..."
         />
+
         <button type="submit">SignIn</button>
       </form>
     </div>

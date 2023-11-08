@@ -10,6 +10,7 @@ import Selected_User_Dashboard from "./components/firebase_auth/Selected_User_Da
 // import { useMusic } from "./components/provider/MusicProvider";
 import UI_Test from "./__test2__/UI_Test";
 import UI_Layout from "./components/UI_Layout";
+import MusicLogin from "./components/MusicLogin";
 // import Music_app from "./components/music_player/Music_app";
 // import Auth2 from "./__test2__/Auth2";
 // import Auth from "./__test2__/Auth";
@@ -25,10 +26,7 @@ const App = () => {
       {/* <Music_Auth></Music_Auth> */}
       <Routes>
         {/* <Route path="/profile" element={<Music_Dashboard />}></Route> */}
-        <Route
-          path="/login"
-          element={<Music_Login_Form></Music_Login_Form>}
-        ></Route>
+        <Route path="/login" element={<MusicLogin></MusicLogin>}></Route>
         <Route
           path="/"
           element={

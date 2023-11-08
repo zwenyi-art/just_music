@@ -14,7 +14,7 @@ const MusicList = ({ ...musicProps }) => {
   return (
     <div
       {...musicProps}
-      className=" bg-transparent text-xl  px-3 pt-3 text-black flex flex-col gap-y-2 w-full h-full scroll-smooth  overflow-y-auto over_flow_hide"
+      className=" bg-transparent text-sm  px-3 pt-3 text-black flex flex-col gap-y-2 w-full h-full scroll-smooth  overflow-y-auto over_flow_hide"
     >
       {songs?.map((e, index) => (
         <div

@@ -19,18 +19,7 @@ const UI_Layout = () => {
   const token = Cookies.get("1519NKO");
   // const navigate = useNavigate();
   const [myData, setMyData] = useState();
-  const logout = async () => {
-    try {
-      await signOut(auth).then(() => {
-        console.log("logout Success");
-        Cookies.remove("1519NKO");
-        setSong([]);
-        // navigate("/login");
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
   useEffect(() => {
     // GetData(setMyData);
     if (currentUser) {

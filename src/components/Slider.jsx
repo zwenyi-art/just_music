@@ -5,7 +5,24 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import { CgLogOut } from "react-icons/cg";
 import Button from "./Button";
 import UserLists from "./UserLists";
+import { signOut } from "firebase/auth";
+import { auth } from "../config/firebase";
+import Cookies from "js-cookie";
+import { useMusic } from "./provider/MusicProvider";
 const Slider = ({ show, ...sliderProps }) => {
+  const { setSong } = useMusic();
+  const logout = async () => {
+    try {
+      await signOut(auth).then(() => {
+        console.log("logout Success");
+        Cookies.remove("1519NKO");
+        setSong([]);
+        // navigate("/login");
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div
       {...sliderProps}
@@ -15,7 +32,6 @@ const Slider = ({ show, ...sliderProps }) => {
  }   -translate-x-full px-2 pt-3 mx-auto  container  flex flex-col gap-y-3 max-w-[250px] h-full bg-slate-600/25 backdrop-blur-sm`}
     >
       <Button
-        
         className={
           "hover:bg-slate-400/70 transition-all duration-200 hover:text-white bg-[#FDFFF5] px-4 py-[10px] rounded-md "
         }
@@ -36,7 +52,10 @@ const Slider = ({ show, ...sliderProps }) => {
       </div>
       <div className="absolute bottom-2 right-0 left-0 flex items-center justify-center">
         <div className=" hover:bg-blue-400/70 flex items-center justify-center w-fit h-fit transition-all duration-200 hover:text-white bg-[#FDFFF5] px-16  py-[10px] rounded-md ">
-          <button className="select-none flex  items-center justify-center gap-x-3">
+          <button
+            onClick={logout}
+            className="select-none flex  items-center justify-center gap-x-3"
+          >
             <CgLogOut size={25}></CgLogOut>
             <span className="text-xl">Logout</span>
           </button>
