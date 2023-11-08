@@ -21,6 +21,7 @@ const Music_Dashboard = () => {
       await signOut(auth).then(() => {
         console.log("logout Success");
         Cookies.remove("1519NKO");
+        setSong([]);
         navigate("/login");
       });
     } catch (error) {
@@ -29,20 +30,23 @@ const Music_Dashboard = () => {
   };
   useEffect(() => {
     // GetData(setMyData);
-    myMusic();
-  }, []);
+    if (currentUser) {
+      myMusic();
+    }
+  }, [currentUser]);
   useEffect(() => {
     if (myData) {
       console.log(myData);
     }
   }, [myData]);
   const myMusic = () => {
-    getSingle(setSong);
+    getSingle(setSong, currentUser);
     console.log("My Music");
   };
   return (
     <div>
       Music_Dashboard
+      <h1 className="text-red-500">Hello</h1>
       <h6>{currentUser?.email}</h6>
       <Music_Logout_Form logout={logout}></Music_Logout_Form>
       <br />

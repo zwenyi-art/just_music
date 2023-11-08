@@ -12,17 +12,18 @@ const Music_List = () => {
   }, [songs]);
   return (
     <div>
-      Song_List
-      {songs?.map((e, index) => (
-        <p
-          key={e.title}
-          className={` ${selectedSong == index ? "active_Music" : ""}`}
-          onClick={() => songSelect(index)}
-        >
-          {e.title}
-          {/* {e.url} */}
-        </p>
-      ))}
+      {!songs && <div>I am fetching sdlkfjdskljfskjkl</div>}
+      {songs &&
+        songs?.map((e, index) => (
+          <p
+            key={e.title}
+            className={` ${selectedSong == index ? "active_Music" : ""}`}
+            onClick={() => songSelect(index)}
+          >
+            {e.title}
+            {/* {e.url} */}
+          </p>
+        ))}
     </div>
   );
 };

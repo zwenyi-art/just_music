@@ -2,18 +2,30 @@ import React, { useEffect, useRef, useState } from "react";
 import { useMusic } from "../../provider/MusicProvider";
 
 const Music_Player = () => {
-  const { songs, selectedSong, nextSong, setSelectedSong, isReady } =
-    useMusic();
+  const {
+    intervalId,
+    setIntevalId,
+    songs,
+    selectedSong,
+    backSong,
+    nextSong,
+    setSelectedSong,
+    isReady,
+  } = useMusic();
   const currentSong = songs[selectedSong]?.url;
   const song = useRef(new Audio(songs[selectedSong]?.url));
   const [music_volume, setMusic_volume] = useState(0.5);
   const [trackProgress, setTrackProgress] = useState(0);
-  const [intervalId, setIntevalId] = useState(null);
+  // const [intervalId, setIntevalId] = useState(null);
   const [canPlay, setCanPlay] = useState(false);
   const [playing, setPlaying] = useState(false);
   const { duration } = song.current;
   const intervalRef = useRef();
+
   useEffect(() => {
+    if (song.current) {
+      song.current = null;
+    }
     song.current = new Audio(currentSong);
     song.current.volume = music_volume;
     setTrackProgress(song.current.currentTime);
@@ -22,7 +34,7 @@ const Music_Player = () => {
       startTimer();
     }
     return () => {
-      clearInterval(intervalId);
+      clearInterval(intervalRef.current);
       song.current.pause();
     };
   }, [selectedSong]);
@@ -64,14 +76,22 @@ const Music_Player = () => {
         console.log("saving progress");
       }
     };
-    const interval = setInterval(logCurrentTime, 1000);
-    setIntevalId(interval);
+    intervalRef.current = setInterval(logCurrentTime, 1000);
   };
   const playSong = () => {
     song.current.play();
     startTimer();
   };
   const pauseSong = () => {
+    clearInterval(intervalRef.current);
+    song.current.pause();
+    song.current.currentTime = 0;
+    setPlaying(false);
+  };
+
+  const stopSong = () => {
+    clearInterval(intervalRef.current);
+    song.current.currentTime = 0;
     song.current.pause();
     setPlaying(false);
   };
@@ -82,6 +102,9 @@ const Music_Player = () => {
     } else {
       setSelectedSong(0);
     }
+  };
+  const toBackTrack = () => {
+    backSong(selectedSong);
   };
   //volume changer
 
@@ -96,16 +119,35 @@ const Music_Player = () => {
     console.log(music_volume);
   }, [music_volume]);
   //volume changer
+  useEffect(() => {
+    console.log("Music component mounted");
+    return () => {
+      console.log("Music component unmounted");
+
+      // Stop playing the audio, if it's playing
+      if (song.current) {
+        setPlaying(false);
+        song.current.pause();
+        song.current.currentTime = 0;
+      }
+      // Clean up the audio object
+      song.current = null;
+    };
+  }, []);
   return (
     <div>
       Song_Player <br />
       {canPlay ? <h1>Can Play Muisic</h1> : <h1>Fetching</h1>}
       {playing ? (
-        <button onClick={() => pauseSong()}>Pause</button>
+        <>
+          <button onClick={() => pauseSong()}>Pause</button>
+          <button onClick={() => toBackTrack()}>Back</button>
+          <button onClick={() => toNextTrack()}>Next</button>
+        </>
       ) : (
         <button onClick={() => playSong()}>Play</button>
       )}
-      <button onClick={() => toNextTrack()}>Next</button>
+      <button onClick={() => stopSong()}>Stop</button>
       <input
         type="range"
         min="0"

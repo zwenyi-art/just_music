@@ -1,9 +1,18 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useState } from "react";
 import { db, storage } from "../../config/firebase";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { useMusic } from "../provider/MusicProvider";
+import { useNavigate } from "react-router-dom";
 
 const Music_Upload = () => {
+  const { songs, currentUser } = useMusic();
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   // const storageRef = ref(storage, "SF");
@@ -11,12 +20,24 @@ const Music_Upload = () => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
   };
+  const addData = async (music_link) => {
+    const citiesRef = collection(db, "users");
+    await setDoc(doc(citiesRef, currentUser?.uid), {
+      id: currentUser?.uid,
+      music: [
+        {
+          title: file?.name.replace(".mp3", ""),
+          url: music_link,
+        },
+      ],
+    });
+  };
   const addNewData = async (music_link) => {
     const newSong = {
-      title: "Dax Life_Ok",
+      title: file?.name.replace(".mp3", ""),
       url: music_link,
     };
-    const sfDocumentRef = doc(db, "users", "SF");
+    const sfDocumentRef = doc(db, "users", currentUser?.uid);
     const dataToUpdate = {
       music: arrayUnion(newSong),
     };
@@ -43,7 +64,11 @@ const Music_Upload = () => {
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               console.log(downloadURL);
-              addNewData(downloadURL);
+              if (songs.length > 0) {
+                addNewData(downloadURL);
+              } else {
+                addData(downloadURL);
+              }
             });
           }
         );

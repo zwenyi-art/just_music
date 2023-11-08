@@ -13,12 +13,12 @@ const GetData = async (setMyData) => {
   });
   setMyData([...citesData]);
 };
-export const getSingle = async (setSong) => {
+export const getSingle = async (setSong, currentUser) => {
   const musicData = [];
-  const q = query(
-    collection(db, "users"),
-    where("id", "==", "GSnrl4I9zKW5AggAODGs484rSj03")
-  );
+  const queryCondition = currentUser?.uid
+    ? where("id", "==", currentUser?.uid)
+    : where("id", "==", currentUser);
+  const q = query(collection(db, "users"), queryCondition);
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
@@ -26,6 +26,8 @@ export const getSingle = async (setSong) => {
     musicData.push(doc.data().music);
   });
   // console.log(musicData);
-  setSong([...musicData[0]]);
+  if (musicData.length > 0) {
+    setSong([...musicData[0]]);
+  }
 };
 export default GetData;

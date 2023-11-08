@@ -1,16 +1,6 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* input[type="range"] {
   appearance: slider-vertical;
 } */
@@ -19,20 +9,32 @@ code {
   background-color: aqua;
 }
 
-input[type="range"] {
-  height: 5px;
-  width: 100%;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background: #3b7677;
-  transition: #3b7677 0.2s ease;
-  cursor: pointer;
+.over_flow_hide::-webkit-scrollbar {
+  display: none; /* chrome and opera */
+}
+.over_flow_hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+body {
+  overflow: hidden;
 }
 
-.flex {
-  width: 100vw;
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
-  align-items: center;
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.scrolling-container {
+  /* Adjust the width as needed */
+  white-space: nowrap;
+}
+
+.animate-scrolling-text {
+  width: 100%;
+  animation: scroll 30s linear infinite; /* Adjust the duration as needed */
 }

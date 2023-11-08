@@ -8,9 +8,21 @@ const MusicProvider = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
   const [songs, setSong] = useState([]);
   const [currentUser, setCurrentUser] = useState();
+  const [selectedUser, setSelectedUser] = useState();
+  const [intervalId, setIntevalId] = useState(null);
+
   const nextSong = (selectedSong) => {
     if (selectedSong < songs.length - 1) {
       setSelectedSong(selectedSong + 1);
+      setIsReady(true);
+    }
+  };
+  const backSong = (selectedSong) => {
+    if (selectedSong - 1 < 0) {
+      setSelectedSong(songs.length - 1);
+      setIsReady(true);
+    } else {
+      setSelectedSong(selectedSong - 1);
       setIsReady(true);
     }
   };
@@ -28,15 +40,20 @@ const MusicProvider = ({ children }) => {
   return (
     <MusicContext.Provider
       value={{
+        selectedUser,
+        setSelectedUser,
         currentUser,
         setCurrentUser,
         songs,
         setSong,
         nextSong,
+        backSong,
         selectedSong,
         isReady,
         setIsReady,
         setSelectedSong,
+        intervalId,
+        setIntevalId,
       }}
     >
       {children}
